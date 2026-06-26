@@ -3,7 +3,7 @@ import cors from 'cors'
 import 'dotenv/config'  
 import { getCostData } from './CostApiData/costData.js'  
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
-import { makePdf } from './pdfReport.js'
+import { makePdf } from "./Pdfkit/pdfReport.js";
 
 const app = express()             
 const PORT = process.env.PORT || 4000 

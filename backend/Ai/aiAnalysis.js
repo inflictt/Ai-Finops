@@ -2,6 +2,7 @@
 // Sends the cost data to Google Gemini and returns a markdown report.
 // If there's no GEMINI_API_KEY (or the call fails), it falls back to a mock,
 // so the pipeline always works.
+console.log("Analysis in making");
 
 function buildPrompt(costData) {
   return (

@@ -1,3 +1,5 @@
+console.log("Data fetching  in making");
+
 const SAMPLE = {
   period: { start: '2026-05-26', end: '2026-06-25' },
   total_spend: 784.16,
