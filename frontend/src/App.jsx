@@ -54,7 +54,7 @@ export default function App() {
         <div className="flex-1 flex flex-col min-w-0">
           <Topbar page={page} dark={dark} setDark={setDark} onGenerate={onGenerate} generating={generating} />
           <main className="flex-1 overflow-y-auto p-5 sm:p-7">
-            <div className="max-w-[1320px]">{pages[page]}</div>
+            <div className="max-w-330">{pages[page]}</div>
           </main>
         </div>
       </div>
