@@ -6,9 +6,9 @@ import { tint } from '../lib/util.js'
 import { SERVICES, FINDINGS } from '../lib/data.js'
 
 export default function Dashboard({ reports }) {
-  const latest = reports[0]
+  // const latest = reports[0]
   const readyCount = reports.filter((r) => r.status === 'Ready').length
-
+  const latest = reports[0] || { total: '$0.00', saveRange: '—', reduction: '—', model: '—', date: '—' }
   return (
     <div>
       <div className="eyebrow mb-3"><span className="ebdot" />Weekly cost intelligence · ap-south-1</div>

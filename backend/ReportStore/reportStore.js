@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto'
 const reports = [] // newest first
 // save a freshly generated report, return its metadata + id
+
 export function addReport({ markdown, pdf, costData }) {
   const total = costData.total_spend
   const report = {
