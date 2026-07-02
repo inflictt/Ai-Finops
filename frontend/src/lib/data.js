@@ -19,7 +19,7 @@ export const SERVICES = [
   { name: 'EC2 – Other', spend: 88.0, save: '$6–12', pct: 11 },
   { name: 'Amazon S3', spend: 24.7, save: '$4–8', pct: 4 },
   { name: 'Amazon VPC', spend: 14.6, save: '$1–2', pct: 2 },
-  { name: 'CloudWatch', spend: 2.86, save: '$0–1', pct: 1 },
+  { name: 'CloudWatch', spend: 3.98, save: '$0–1', pct: 1 },
 ]
 
 export const FINDINGS = [

@@ -2,6 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import { initDb } from './db.js'
+import { generateAndSaveReport } from './nodeCron/pipeline.js'
+import { startScheduler } from './nodeCron/scheduler.js'
+
 
 import { getCostData } from './CostApiData/costData.js'
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
@@ -11,6 +14,7 @@ import { addReport, listReports, getReport } from './ReportStore/reportStore.js'
 const app = express()
 const PORT = process.env.PORT || 4000
 initDb().catch((e) => console.error('DB init failed:', e))
+startScheduler()
 
 app.use(cors())
 app.use(express.json())
@@ -47,17 +51,41 @@ app.get('/api/report/pdf', async (req, res) => {
   res.send(pdf)
 })
 
-// Generate + Save Report
+// // Generate + Save Report
+// app.post('/api/generate', async (req, res) => {
+//   const costData = getCostData()
+//   const markdown = await analyzeWithGemini(costData)
+//   const pdf = await makePdf(markdown)
+
+//   const report = await addReport({ markdown, pdf, costData })
+
+//   const { id, date, total, savings, reduction, status } = report
+
+//   res.json({ id, date, total, savings, reduction, status })
+// })
+
+// /api/generate now reuses the shared pipeline:
 app.post('/api/generate', async (req, res) => {
-  const costData = getCostData()
-  const markdown = await analyzeWithGemini(costData)
-  const pdf = await makePdf(markdown)
+  try {
+    const report = await generateAndSaveReport()
 
-  const report = await addReport({ markdown, pdf, costData })
+    const { id, date, total, savings, reduction, status } = report
 
-  const { id, date, total, savings, reduction, status } = report
+    res.json({
+      id,
+      date,
+      total,
+      savings,
+      reduction,
+      status,
+    })
+  } catch (err) {
+    console.error(err)
 
-  res.json({ id, date, total, savings, reduction, status })
+    res.status(500).json({
+      error: "Failed to generate report",
+    })
+  }
 })
 
 // List Reports

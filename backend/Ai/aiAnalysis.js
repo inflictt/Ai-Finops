@@ -4,6 +4,8 @@
 // // so the pipeline always works.
 // console.log("Analysis in making");
 
+import { error } from 'node:console'
+
 // function buildPrompt(costData) {
 //   return (
 //     'You are a senior AWS FinOps analyst. Analyze this cost data (JSON) and write a ' +
@@ -109,7 +111,8 @@ export async function analyzeWithGemini(costData) {
 
   if (!apiKey) {
     console.log('  [no GEMINI_API_KEY -> using mock analysis]')
-    return mockAnalysis(costData)
+    return `NoApi key Linked `
+    // return mockAnalysis(costData)
   }
 
   try {
@@ -122,65 +125,68 @@ export async function analyzeWithGemini(costData) {
     return response.text
   } catch (err) {
     console.log('  [Gemini call failed:', err.message, '-> using mock]')
-    return mockAnalysis(costData)
+    // return mockAnalysis(costData)
+    return ErrorMessage(costData)
   }
 }
-
-function mockAnalysis(costData) {
-  const total = costData.total_spend
-  const rows = costData.by_service
-    .map((s) => `| ${s.service} | $${s.amount.toFixed(2)} | ${Math.round((s.amount / total) * 100)}% |`)
-    .join('\n')
-
-  return `# Cloud Cost Report
-
-## In plain English
-Last month your cloud bill was **$${total.toFixed(2)}**. Almost all of it comes from two things — your **database** and your **servers**. By committing to them for a year and switching off waste, you can save an estimated **$226-298 per month (about 30%)**, with no impact on how anything runs.
-
-## Where the money goes
-
-| Service | Monthly cost | Share of bill |
-| --- | --- | --- |
-${rows}
-
-In plain words: **RDS** is the managed database that stores your app's data, and **EC2** are the rented computers ("servers") that run it — together they are the large majority of the bill.
-
-## Biggest ways to save
-
-### Commit for a year — save ~$52-65/month
-- **What it means:** right now you pay full "pay-as-you-go" prices. A 1-year commitment is like an annual subscription instead of paying daily — same usage, much cheaper.
-- **What to do:** buy 1-year Reserved Instances / Savings Plans for the database and servers.
-- **Effort:** Easy.
-
-### Turn off oversized servers — save ~$40-60/month
-- **What it means:** some servers are far bigger than needed — like renting a truck to carry a backpack.
-- **What to do:** move them to a smaller size that matches real usage.
-- **Effort:** Medium.
-
-### Clean up old storage — save ~$10-20/month
-- **What it means:** old files pile up forever and quietly keep costing money.
-- **What to do:** set rules that automatically archive or delete old versions.
-- **Effort:** Easy.
-
-### Upgrade the disks — save ~20% on storage
-- **What it means:** a newer disk type ("GP3") is cheaper and faster than the old one ("GP2").
-- **What to do:** switch the disks over — no downtime.
-- **Effort:** Easy.
-
-## What to do first
-1. Buy the 1-year commitments — the biggest, easiest win.
-2. Right-size the oversized servers.
-3. Add automatic storage cleanup rules.
-
-## Bottom line
-Your current bill is **$${total.toFixed(2)} per month**. After these changes it drops to roughly **$540-560 per month** — a saving of about **$226-298 per month (~30%)**, with no effect on performance.
-
-## Glossary
-- **RDS:** a managed database — cloud-run storage for your app's data.
-- **EC2:** rented virtual computers ("servers") that run your software.
-- **Reserved Instance / Savings Plan:** a 1-year commitment that gives a big discount vs pay-as-you-go.
-- **Right-sizing:** matching a server's size to what it actually needs.
-- **Lifecycle policy:** an automatic rule to archive or delete old files.
-- **GP2 / GP3:** older vs newer disk types; GP3 is cheaper and faster.
-`
+function ErrorMessage(costData){
+  return `You api is not working .`
 }
+// function mockAnalysis(costData) {
+//   const total = costData.total_spend
+//   const rows = costData.by_service
+//     .map((s) => `| ${s.service} | $${s.amount.toFixed(2)} | ${Math.round((s.amount / total) * 100)}% |`)
+//     .join('\n')
+
+//   return `# Cloud Cost Report
+
+// ## In plain English
+// Last month your cloud bill was **$${total.toFixed(2)}**. Almost all of it comes from two things — your **database** and your **servers**. By committing to them for a year and switching off waste, you can save an estimated **$226-298 per month (about 30%)**, with no impact on how anything runs.
+
+// ## Where the money goes
+
+// | Service | Monthly cost | Share of bill |
+// | --- | --- | --- |
+// ${rows}
+
+// In plain words: **RDS** is the managed database that stores your app's data, and **EC2** are the rented computers ("servers") that run it — together they are the large majority of the bill.
+
+// ## Biggest ways to save
+
+// ### Commit for a year — save ~$52-65/month
+// - **What it means:** right now you pay full "pay-as-you-go" prices. A 1-year commitment is like an annual subscription instead of paying daily — same usage, much cheaper.
+// - **What to do:** buy 1-year Reserved Instances / Savings Plans for the database and servers.
+// - **Effort:** Easy.
+
+// ### Turn off oversized servers — save ~$40-60/month
+// - **What it means:** some servers are far bigger than needed — like renting a truck to carry a backpack.
+// - **What to do:** move them to a smaller size that matches real usage.
+// - **Effort:** Medium.
+
+// ### Clean up old storage — save ~$10-20/month
+// - **What it means:** old files pile up forever and quietly keep costing money.
+// - **What to do:** set rules that automatically archive or delete old versions.
+// - **Effort:** Easy.
+
+// ### Upgrade the disks — save ~20% on storage
+// - **What it means:** a newer disk type ("GP3") is cheaper and faster than the old one ("GP2").
+// - **What to do:** switch the disks over — no downtime.
+// - **Effort:** Easy.
+
+// ## What to do first
+// 1. Buy the 1-year commitments — the biggest, easiest win.
+// 2. Right-size the oversized servers.
+// 3. Add automatic storage cleanup rules.
+
+// ## Bottom line
+// Your current bill is **$${total.toFixed(2)} per month**. After these changes it drops to roughly **$540-560 per month** — a saving of about **$226-298 per month (~30%)**, with no effect on performance.
+
+// ## Glossary
+// - **RDS:** a managed database — cloud-run storage for your app's data.
+// - **EC2:** rented virtual computers ("servers") that run your software.
+// - **Reserved Instance / Savings Plan:** a 1-year commitment that gives a big discount vs pay-as-you-go.
+// - **Right-sizing:** matching a server's size to what it actually needs.
+// - **Lifecycle policy:** an automatic rule to archive or delete old files.
+// - **GP2 / GP3:** older vs newer disk types; GP3 is cheaper and faster.
+// `
+// }

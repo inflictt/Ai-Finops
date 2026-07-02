@@ -85,7 +85,7 @@ export default function Dashboard({ reports }) {
       </div>
 
       {/* latest analysis */}
-      <div className="panel p-6 mt-4">
+      {/* <div className="panel p-6 mt-4">
         <div className="flex items-baseline justify-between mb-1">
         </div>
         <h2 className="disp text-[19px] mt-2 mb-4 max-w-[70ch]">
@@ -109,7 +109,7 @@ export default function Dashboard({ reports }) {
 
       <div className="mono text-[11px] text-muted mt-6 flex items-center gap-2">
         <span className="dot dot-live" style={{ background: '#1F8A5B' }} />UI preview · mock data · no API connected yet
-      </div>
+      </div> */}
     </div>
   )
 }
