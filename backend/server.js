@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
+import { initDb } from './db.js'
 
 import { getCostData } from './CostApiData/costData.js'
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
@@ -9,6 +10,7 @@ import { addReport, listReports, getReport } from './ReportStore/reportStore.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
+initDb().catch((e) => console.error('DB init failed:', e))
 
 app.use(cors())
 app.use(express.json())
@@ -51,7 +53,7 @@ app.post('/api/generate', async (req, res) => {
   const markdown = await analyzeWithGemini(costData)
   const pdf = await makePdf(markdown)
 
-  const report = addReport({ markdown, pdf, costData })
+  const report = await addReport({ markdown, pdf, costData })
 
   const { id, date, total, savings, reduction, status } = report
 
@@ -59,13 +61,13 @@ app.post('/api/generate', async (req, res) => {
 })
 
 // List Reports
-app.get('/api/reports', (req, res) => {
-  res.json(listReports())
+app.get('/api/reports',async (req, res) => {
+  res.json(await listReports())
 })
 
 // Download Report
-app.get('/api/reports/:id/pdf', (req, res) => {
-  const report = getReport(req.params.id)
+app.get('/api/reports/:id/pdf', async(req, res) => {
+  const report = await getReport(req.params.id)
 
   if (!report) {
     return res.status(404).json({ error: 'report not found' })

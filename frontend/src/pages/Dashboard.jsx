@@ -16,14 +16,14 @@ export default function Dashboard({ reports }) {
         Your AWS bill, <span className="accent-text">read by AI.</span>
       </h1>
       <p className="text-[15.5px] text-ink2 mt-3.5 max-w-[58ch]">
-        An automated weekly report finds where the money goes and where you're wasting it — no spreadsheets, no manual analysis.
+        An automated weekly report finds where the money goes and where you're wasting it , no spreadsheets & no manual analysis.
       </p>
 
       {/* metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-7">
-        <MetricCard icon="chart" color="#3A30E0" value={latest.total} label="Monthly spend" delta="▲ 2%" deltaColor="#D6435B" />
-        <MetricCard icon="piggy" color="#1F8A5B" value={latest.saveRange} label="Savings identified" delta="▼ this run" deltaColor="#1F8A5B" />
-        <MetricCard icon="trendDown" color="#0E8C9B" value={'~' + latest.reduction} label="Cost reduction" delta={'▼ ' + latest.reduction} deltaColor="#1F8A5B" />
+        <MetricCard icon="chart" color="#3A30E0" value={latest.total} label="Monthly spend"  />
+        <MetricCard icon="piggy" color="#1F8A5B" value={latest.saveRange} label="Savings identified"  />
+        <MetricCard icon="trendDown" color="#0E8C9B" value={ latest.reduction} label="Cost reduction"  />
         <MetricCard icon="file" color="#5B4BFF" value={String(readyCount)} label="Reports generated" />
       </div>
 

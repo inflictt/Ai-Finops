@@ -3,7 +3,7 @@ import { Icon } from '../lib/icons.jsx'
 
 const NAV = [
   { id: 'dashboard', label: 'Dashboard', icon: 'grid' },
-  { id: 'reports', label: 'Reports', icon: 'report', badge: 1 },
+  { id: 'reports', label: 'Reports', icon: 'report',  },
   { id: 'explorer', label: 'Cost Explorer', icon: 'explore' },
   { id: 'settings', label: 'Settings', icon: 'settings' },
 ]

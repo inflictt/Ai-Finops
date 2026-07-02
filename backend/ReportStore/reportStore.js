@@ -1,31 +1,37 @@
 import { randomUUID } from 'crypto'
-const reports = [] // newest first
-// save a freshly generated report, return its metadata + id
+import { pool } from '../db.js'   
 
-export function addReport({ markdown, pdf, costData }) {
+// INSERT a new report, return its metadata
+export async function addReport({ markdown, pdf, costData }) {
   const total = costData.total_spend
   const report = {
     id: randomUUID(),
     date: new Date().toISOString().slice(0, 10),
     total: `$${total.toFixed(2)}`,
-    savings: `$${Math.round(total * 0.3)}`, // summary estimate; exact figures live in the PDF
+    savings: `$${Math.round(total * 0.3)}`,
     reduction: '~30%',
     status: 'Ready',
-    markdown, 
-    pdf,
   }
-  reports.unshift(report)
+  await pool.query(
+    `INSERT INTO reports (id, date, total, savings, reduction, status, markdown, pdf)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [report.id, report.date, report.total, report.savings, report.reduction, report.status, markdown, pdf]
+  )
   return report
 }
 
-// lightweight list for the dashboard table (no markdown / pdf bytes)
-export function listReports() {
-  return reports.map(({ id, date, total, savings, reduction, status }) => ({
-    id, date, total, savings, reduction, status,
-  }))
+// SELECT lightweight metadata for the dashboard table (no markdown / pdf bytes)
+export async function listReports() {
+  const { rows } = await pool.query(
+    `SELECT id, date, total, savings, reduction, status
+     FROM reports
+     ORDER BY created_at DESC`
+  )
+  return rows
 }
 
-// find one report by id (used to download its PDF)
-export function getReport(id) {
-  return reports.find((r) => r.id === id)
+// SELECT one full report by id (includes the pdf bytes) for download
+export async function getReport(id) {
+  const { rows } = await pool.query('SELECT * FROM reports WHERE id = $1', [id])
+  return rows[0] // undefined if not found
 }
