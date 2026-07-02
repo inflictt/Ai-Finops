@@ -22,5 +22,18 @@ export async function initDb() {
       created_at TIMESTAMPTZ DEFAULT now()
     )
   `)
+   await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id          TEXT PRIMARY KEY,
+      name        TEXT,
+      email       TEXT UNIQUE NOT NULL,
+      password    TEXT,               -- bcrypt hash; NULL for Google-only users
+      google_id   TEXT UNIQUE,        -- set only for Google sign-in users
+      created_at  TIMESTAMPTZ DEFAULT now()
+    )
+  `)
+
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS refresh_token TEXT`)
+
   console.log('DB ready: reports table ensured')
 }

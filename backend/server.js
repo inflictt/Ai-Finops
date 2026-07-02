@@ -4,7 +4,9 @@ import 'dotenv/config'
 import { initDb } from './db.js'
 import { generateAndSaveReport } from './nodeCron/pipeline.js'
 import { startScheduler } from './nodeCron/scheduler.js'
-
+import cookieParser from 'cookie-parser'
+import authRoutes from './Auth/authRoutes.js'
+import { errorHandler } from './middlewares/errorHandler.js'
 
 import { getCostData } from './CostApiData/costData.js'
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
@@ -18,6 +20,9 @@ startScheduler()
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())            
+app.use('/api/auth', authRoutes)
+
 
 // Health
 app.get('/api/health', (req, res) => {
@@ -109,6 +114,7 @@ app.get('/api/reports/:id/pdf', async(req, res) => {
 
   res.send(report.pdf)
 })
+app.use(errorHandler)               
 
 app.listen(PORT, () => {
   console.log(`FinOps backend running on http://localhost:${PORT}`)

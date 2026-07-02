@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import 'dotenv/config'
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -12,7 +13,7 @@ export async function sendReportEmail(report) {
 
   await transporter.sendMail({
     from: process.env.EMAIL,
-    to: process.env.EMAIL, // send to yourself for testing
+    to: process.env.EMAIL, 
     subject: `FinOps Report - ${report.date}`,
     text: `
         Hello,
