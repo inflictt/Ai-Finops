@@ -18,7 +18,7 @@ export async function generateAndSaveReport() {
     })
 
     try {
-        await sendReportEmail(report)
+        await sendReportEmail({ ...report, pdf })   // 
     } catch (err) {
         console.error("Email failed:", err)
     }
