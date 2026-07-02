@@ -70,6 +70,6 @@ import gcp from '../providers/gcp.sample.js'
 
 const SAMPLES = { aws, azure, gcp }
 
-export function getCostData(provider = 'azure') {
+export function getCostData(provider = 'gcp') {
   return SAMPLES[provider] || SAMPLES.aws
 }

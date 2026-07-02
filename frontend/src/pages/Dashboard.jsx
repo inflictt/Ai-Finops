@@ -69,12 +69,14 @@ export default function Dashboard({ reports }) {
             <h2 className="disp text-[19px]">Recent reports</h2>
             <span className="pill"><span className="dot dot-live" style={{ background: '#1F8A5B' }} />weekly</span>
           </div>
-          <div>
+          {/* <div> */}
+            <div className="max-h-[420px] overflow-y-auto pr-2">
+
             {reports.map((r, i) => (
-              <div key={i} className="feed-item">
-                <span className="feed-ic" style={{ background: tint('#3A30E0', 0.12), color: 'var(--accent)' }}><Icon name="file" size={15} /></span>
-                <div className="min-w-0">
-                  <div className="text-[13.5px] font-medium truncate">{r.date}</div>
+              <div key={i} className="feed-item  ">
+                <span className="feed-ic " style={{ background: tint('#3A30E0', 0.12), color: 'var(--accent)' }}><Icon name="file" size={15} /></span>
+                <div className="min-w-0 ">
+                  <div className="text-[13.5px] font-medium truncate ">{r.date}</div>
                   <div className="mono text-[11px] text-muted">{r.total} · save {r.save}</div>
                 </div>
                 <span className="ml-auto"><StatusChip status={r.status} /></span>
