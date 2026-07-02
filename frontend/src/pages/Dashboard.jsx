@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import MetricCard from '../components/MetricCard.jsx'
 import StatusChip from '../components/StatusChip.jsx'
 import { Icon } from '../lib/icons.jsx'
 import { tint } from '../lib/util.js'
-import { SERVICES, FINDINGS } from '../lib/data.js'
+import { FINDINGS } from '../lib/data.js'
+import { getCosts } from '../lib/api.js'
 
 export default function Dashboard({ reports }) {
-  // const latest = reports[0]
-  const readyCount = reports.filter((r) => r.status === 'Ready').length
   const latest = reports[0] || { total: '$0.00', saveRange: '—', reduction: '—', model: '—', date: '—' }
+  const readyCount = reports.filter((r) => r.status === 'Ready').length
+
+  // real cost data from the backend (GET /api/costs)
+  const [costs, setCosts] = useState(null)
+  useEffect(() => {
+    getCosts().then(setCosts).catch((e) => console.error('load costs failed', e))
+  }, [])
+  const services = costs?.by_service ?? []
+  const totalSpend = costs?.total_spend ?? 0
+  const maxAmount = Math.max(1, ...services.map((s) => s.amount))
+
   return (
     <div>
       <div className="eyebrow mb-3"><span className="ebdot" />Weekly cost intelligence · ap-south-1</div>
@@ -16,14 +26,14 @@ export default function Dashboard({ reports }) {
         Your AWS bill, <span className="accent-text">read by AI.</span>
       </h1>
       <p className="text-[15.5px] text-ink2 mt-3.5 max-w-[58ch]">
-        An automated weekly report finds where the money goes and where you're wasting it , no spreadsheets & no manual analysis.
+        An automated weekly report finds where the money goes and where you're wasting it , no spreadsheets, no manual analysis.
       </p>
 
       {/* metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-7">
         <MetricCard icon="chart" color="#3A30E0" value={latest.total} label="Monthly spend"  />
-        <MetricCard icon="piggy" color="#1F8A5B" value={latest.saveRange} label="Savings identified"  />
-        <MetricCard icon="trendDown" color="#0E8C9B" value={ latest.reduction} label="Cost reduction"  />
+        <MetricCard icon="piggy" color="#1F8A5B" value={latest.saveRange} label="Savings identified"   />
+        <MetricCard icon="trendDown" color="#0E8C9B" value={ latest.reduction} label="Cost reduction"   />
         <MetricCard icon="file" color="#5B4BFF" value={String(readyCount)} label="Reports generated" />
       </div>
 
@@ -34,22 +44,23 @@ export default function Dashboard({ reports }) {
             <h2 className="disp text-[19px]">Spend by service</h2>
             <span className="mono text-[11px] text-muted">last 30 days</span>
           </div>
-          <p className="text-[13px] text-muted mb-5">Bar length = monthly spend · chip = potential savings</p>
+          <p className="text-[13px] text-muted mb-5">Bar length = monthly spend · chip = ~30% savings estimate</p>
           <div className="flex flex-col gap-4">
-            {SERVICES.map((s) => (
-              <div key={s.name} className="grid grid-cols-[120px_1fr_auto] items-center gap-3">
-                <span className="text-[13.5px] font-medium truncate">{s.name}</span>
-                <span className="bar-track"><span className="bar-fill" style={{ width: s.pct + '%' }} /></span>
+            {services.map((s) => (
+              <div key={s.service} className="grid grid-cols-[120px_1fr_auto] items-center gap-3">
+                <span className="text-[13.5px] font-medium truncate">{s.service}</span>
+                <span className="bar-track"><span className="bar-fill" style={{ width: (s.amount / maxAmount) * 100 + '%' }} /></span>
                 <span className="flex items-center gap-2 justify-end">
-                  <span className="mono text-[13px] w-[58px] text-right">${s.spend.toFixed(2)}</span>
-                  <span className="chip hidden sm:inline-flex" style={{ color: '#1F8A5B', background: tint('#1F8A5B', 0.12), borderColor: tint('#1F8A5B', 0.3) }}>{s.save}</span>
+                  <span className="mono text-[13px] w-[58px] text-right">${s.amount.toFixed(2)}</span>
+                  <span className="chip hidden sm:inline-flex" style={{ color: '#1F8A5B', background: tint('#1F8A5B', 0.12), borderColor: tint('#1F8A5B', 0.3) }}>~${Math.round(s.amount * 0.3)}</span>
                 </span>
               </div>
             ))}
+            {services.length === 0 && <div className="text-[13px] text-muted">Loading cost data…</div>}
           </div>
           <div className="mt-6 pt-5 border-t border-line flex items-center justify-between">
             <span className="text-[13px] text-muted">Total monthly spend</span>
-            <span className="disp text-[22px]">{latest.total}</span>
+            <span className="disp text-[22px]">${totalSpend.toFixed(2)}</span>
           </div>
         </div>
 
@@ -76,8 +87,6 @@ export default function Dashboard({ reports }) {
       {/* latest analysis */}
       <div className="panel p-6 mt-4">
         <div className="flex items-baseline justify-between mb-1">
-          <div className="eyebrow"><span className="ebdot" />Latest AI analysis</div>
-          <span className="mono text-[11px] text-muted">{latest.model} · {latest.date}</span>
         </div>
         <h2 className="disp text-[19px] mt-2 mb-4 max-w-[70ch]">
           Two services hold almost all the saveable money — commit to reserved capacity and right-size to cut ~30%.

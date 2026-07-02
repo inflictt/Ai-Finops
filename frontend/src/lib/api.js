@@ -1,7 +1,41 @@
-// all backend calls live here
+// // all backend calls live here
+// const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+
+// // backend returns { savings }; the UI expects { save } — map between them
+// function toUi(r) {
+//   return {
+//     id: r.id,
+//     date: r.date,
+//     total: r.total,
+//     save: r.savings,
+//     saveRange: r.savings,
+//     reduction: r.reduction,
+//     status: r.status,
+//     model: 'Gemini',
+//   }
+// }
+
+// export async function getReports() {
+//   const res = await fetch(`${API}/api/reports`)
+//   if (!res.ok) throw new Error('failed to load reports')
+//   const data = await res.json()
+//   return data.map(toUi)
+// }
+
+// export async function generateReport() {
+//   const res = await fetch(`${API}/api/generate`, { method: 'POST' })
+//   if (!res.ok) throw new Error('failed to generate report')
+//   return toUi(await res.json())
+// }
+
+// export function pdfUrl(id) {
+//   return `${API}/api/reports/${id}/pdf`
+// }
+
+// Part 6 — talks to the backend. All fetch calls live here.
 const API = import.meta.env.VITE_API_URL || 'http://localhost:4000'
 
-// backend returns { savings }; the UI expects { save } — map between them
+// backend returns { savings }, the UI expects { save } — map between them here
 function toUi(r) {
   return {
     id: r.id,
@@ -15,6 +49,7 @@ function toUi(r) {
   }
 }
 
+// GET the saved reports (for the dashboard table)
 export async function getReports() {
   const res = await fetch(`${API}/api/reports`)
   if (!res.ok) throw new Error('failed to load reports')
@@ -22,10 +57,18 @@ export async function getReports() {
   return data.map(toUi)
 }
 
+// POST to run the pipeline + save a new report
 export async function generateReport() {
   const res = await fetch(`${API}/api/generate`, { method: 'POST' })
   if (!res.ok) throw new Error('failed to generate report')
   return toUi(await res.json())
+}
+
+// URL to download a specific report's PDF
+export async function getCosts() {
+  const res = await fetch(`${API}/api/costs`)
+  if (!res.ok) throw new Error('failed to load costs')
+  return res.json() // { total_spend, by_service: [{ service, amount }], ... }
 }
 
 export function pdfUrl(id) {
