@@ -69,7 +69,6 @@ export default function Dashboard({ reports }) {
             <h2 className="disp text-[19px]">Recent reports</h2>
             <span className="pill"><span className="dot dot-live" style={{ background: '#1F8A5B' }} />weekly</span>
           </div>
-          {/* <div> */}
             <div className="max-h-[420px] overflow-y-auto pr-2">
 
             {reports.map((r, i) => (
