@@ -44,7 +44,7 @@ export default function Dashboard({ reports }) {
             <h2 className="disp text-[19px]">Spend by service</h2>
             <span className="mono text-[11px] text-muted">last 30 days</span>
           </div>
-          <p className="text-[13px] text-muted mb-5">Bar length = monthly spend · chip = ~30% savings estimate</p>
+          <p className="text-[13px] text-muted mb-5">Bar length = monthly spend · chip = estimated savings</p>
           <div className="flex flex-col gap-4">
             {services.map((s) => (
               <div key={s.service} className="grid grid-cols-[120px_1fr_auto] items-center gap-3">
@@ -52,7 +52,7 @@ export default function Dashboard({ reports }) {
                 <span className="bar-track"><span className="bar-fill" style={{ width: (s.amount / maxAmount) * 100 + '%' }} /></span>
                 <span className="flex items-center gap-2 justify-end">
                   <span className="mono text-[13px] w-[58px] text-right">${s.amount.toFixed(2)}</span>
-                  <span className="chip hidden sm:inline-flex" style={{ color: '#1F8A5B', background: tint('#1F8A5B', 0.12), borderColor: tint('#1F8A5B', 0.3) }}>~${Math.round(s.amount * 0.3)}</span>
+                  <span className="chip hidden sm:inline-flex" style={{ color: '#1F8A5B', background: tint('#1F8A5B', 0.12), borderColor: tint('#1F8A5B', 0.3) }}>~${s.savings ?? Math.round(s.amount * 0.3)}</span>
                 </span>
               </div>
             ))}
