@@ -1,16 +1,18 @@
 // Phase 4 — reports are now scoped to the user who created them.
 import { randomUUID } from 'crypto'
 import { pool } from '../db.js'
+import { analyzeCosts } from '../Analysis/costAnalysis.js'
 
 // INSERT a new report, stamped with its owner's user_id.
 export async function addReport({ markdown, pdf, costData, userId = null }) {
-  const total = costData.total_spend
+  // real, computed numbers (per-service rule-based) — no more flat 0.3 / '~30%'
+  const a = analyzeCosts(costData)
   const report = {
     id: randomUUID(),
     date: new Date().toISOString().slice(0, 10),
-    total: `$${total.toFixed(2)}`,
-    savings: `$${Math.round(total * 0.3)}`,
-    reduction: '~30%',
+    total: `$${a.total_spend.toFixed(2)}`,
+    savings: `$${a.total_savings}`,
+    reduction: `~${a.reduction_pct}%`,
     status: 'Ready',
   }
   await pool.query(

@@ -8,6 +8,7 @@ import { startScheduler } from './nodeCron/scheduler.js'
 import authRoutes from './Auth/authRoutes.js'
 import { verifyJWT } from './middlewares/verifyJWT.js'
 import { errorHandler } from './middlewares/errorHandler.js'
+import { analyzeCosts } from './Analysis/costAnalysis.js' 
 
 import { getCostData } from './CostApiData/costData.js'
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
@@ -34,9 +35,8 @@ app.get('/api/health', (req, res) => {
 // ---- protected: must be logged in (verifyJWT sets req.user) ----
 
 // Cost data for the dashboard charts
-app.get('/api/costs', verifyJWT, (req, res) => {
-  res.json(getCostData())
-})
+app.get('/api/costs', verifyJWT, (req, res) => { res.json(analyzeCosts(getCostData())) })
+
 
 // Generate + save a report FOR THIS USER
 app.post('/api/generate', verifyJWT, async (req, res) => {

@@ -24,8 +24,9 @@ export default function CostExplorer() {
       name: s.service,
       spend: s.amount,
       pct: share,
-      critical: share >= 20,
-      save: `$${Math.round(s.amount * 0.25)}–${Math.round(s.amount * 0.4)}`,
+      // priority + savings now come computed from the backend analysis layer
+      critical: s.priority ? s.priority === 'critical' : share >= 20,
+      save: `~$${s.savings ?? Math.round(s.amount * 0.3)}`,
     }
   })
 
