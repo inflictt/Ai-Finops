@@ -25,15 +25,6 @@ export default function Sidebar({ page, setPage }) {
           </button>
         ))}
       </div>
-      <div className="p-3">
-        <div className="panel p-3 flex items-center gap-3">
-          <span className="av">SL</span>
-          <div className="leading-tight">
-            <div className="text-[13px] font-semibold">Saksham</div>
-            <div className="mono text-[11px] text-muted">FinOps · admin</div>
-          </div>
-        </div>
-      </div>
     </aside>
   )
 }

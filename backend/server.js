@@ -1,120 +1,85 @@
 import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
+import cookieParser from 'cookie-parser'
 import { initDb } from './db.js'
 import { generateAndSaveReport } from './nodeCron/pipeline.js'
 import { startScheduler } from './nodeCron/scheduler.js'
-import cookieParser from 'cookie-parser'
 import authRoutes from './Auth/authRoutes.js'
+import { verifyJWT } from './middlewares/verifyJWT.js'
 import { errorHandler } from './middlewares/errorHandler.js'
 
 import { getCostData } from './CostApiData/costData.js'
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
 import { makePdf } from './Pdfkit/pdfReport.js'
-import { addReport, listReports, getReport } from './ReportStore/reportStore.js'
+import { listReports, getReport } from './ReportStore/reportStore.js'
 
 const app = express()
 const PORT = process.env.PORT || 4000
+
 initDb().catch((e) => console.error('DB init failed:', e))
 startScheduler()
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use(express.json())
-app.use(cookieParser())            
-app.use('/api/auth', authRoutes) 
+app.use(cookieParser())
 
+// ---- public ----
+app.use('/api/auth', authRoutes)
 
-// Health
 app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    service: 'finops-backend',
-    time: new Date().toISOString(),
-  })
+  res.json({ status: 'ok', service: 'finops-backend', time: new Date().toISOString() })
 })
 
-// Sample cost data
-app.get('/api/costs', (req, res) => {
+// ---- protected: must be logged in (verifyJWT sets req.user) ----
+
+// Cost data for the dashboard charts
+app.get('/api/costs', verifyJWT, (req, res) => {
   res.json(getCostData())
 })
 
-// AI analysis
+// Generate + save a report FOR THIS USER
+app.post('/api/generate', verifyJWT, async (req, res) => {
+  try {
+    const report = await generateAndSaveReport(req.user.id) // ← owner
+    const { id, date, total, savings, reduction, status } = report
+    res.json({ id, date, total, savings, reduction, status })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Failed to generate report' })
+  }
+})
+
+// List only THIS user's reports
+app.get('/api/reports', verifyJWT, async (req, res) => {
+  res.json(await listReports(req.user.id))
+})
+
+// Download one of THIS user's reports (404 if it isn't theirs)
+app.get('/api/reports/:id/pdf', verifyJWT, async (req, res) => {
+  const report = await getReport(req.params.id, req.user.id)
+  if (!report) return res.status(404).json({ error: 'report not found' })
+
+  res.setHeader('Content-Type', 'application/pdf')
+  res.setHeader('Content-Disposition', `attachment; filename="finops-report-${report.id}.pdf"`)
+  res.send(report.pdf)
+})
+
+// ---- dev/test routes (sample data, no user) ----
 app.post('/api/analyze', async (req, res) => {
-  const costData = getCostData()
-  const analysis = await analyzeWithGemini(costData)
+  const analysis = await analyzeWithGemini(getCostData())
   res.json({ analysis })
 })
 
-// Generate PDF directly
 app.get('/api/report/pdf', async (req, res) => {
-  const costData = getCostData()
-  const analysis = await analyzeWithGemini(costData)
-  const pdf = await makePdf(analysis)
-
+  const pdf = await makePdf(await analyzeWithGemini(getCostData()))
   res.setHeader('Content-Type', 'application/pdf')
   res.setHeader('Content-Disposition', 'attachment; filename="finops-report.pdf"')
   res.send(pdf)
 })
 
-// // Generate + Save Report
-// app.post('/api/generate', async (req, res) => {
-//   const costData = getCostData()
-//   const markdown = await analyzeWithGemini(costData)
-//   const pdf = await makePdf(markdown)
-
-//   const report = await addReport({ markdown, pdf, costData })
-
-//   const { id, date, total, savings, reduction, status } = report
-
-//   res.json({ id, date, total, savings, reduction, status })
-// })
-
-// /api/generate now reuses the shared pipeline:
-app.post('/api/generate', async (req, res) => {
-  try {
-    const report = await generateAndSaveReport()
-
-    const { id, date, total, savings, reduction, status } = report
-
-    res.json({
-      id,
-      date,
-      total,
-      savings,
-      reduction,
-      status,
-    })
-  } catch (err) {
-    console.error(err)
-
-    res.status(500).json({
-      error: "Failed to generate report",
-    })
-  }
-})
-
-// List Reports
-app.get('/api/reports',async (req, res) => {
-  res.json(await listReports())
-})
-
-// Download Report
-app.get('/api/reports/:id/pdf', async(req, res) => {
-  const report = await getReport(req.params.id)
-
-  if (!report) {
-    return res.status(404).json({ error: 'report not found' })
-  }
-
-  res.setHeader('Content-Type', 'application/pdf')
-  res.setHeader(
-    'Content-Disposition',
-    `attachment; filename="finops-report-${report.id}.pdf"`
-  )
-
-  res.send(report.pdf)
-})
-app.use(errorHandler)               
+// error handler LAST (after all routes)
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`FinOps backend running on http://localhost:${PORT}`)

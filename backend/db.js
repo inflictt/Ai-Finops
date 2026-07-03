@@ -33,7 +33,7 @@ export async function initDb() {
     )
   `)
 
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS refresh_token TEXT`)
-
+    await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS refresh_token TEXT`)
+    await pool.query(`ALTER TABLE reports ADD COLUMN IF NOT EXISTS user_id TEXT`)
   console.log('DB ready: reports table ensured')
 }
