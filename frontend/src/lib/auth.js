@@ -24,7 +24,7 @@ export const loginUser = (email, password) =>
 
 export const logoutUser = () => post('/api/auth/logout')
 
-// "Who am I?" — reads the cookie on the backend. Returns the user or null.
+// "Current User" — reads the cookie on the backend. Returns the user or null.
 export async function getMe() {
   const res = await fetch(`${API}/api/auth/me`, { credentials: 'include' })
   if (!res.ok) return null 
