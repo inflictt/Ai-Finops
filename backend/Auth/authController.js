@@ -14,8 +14,7 @@ import {
   setRefreshToken,
 } from './userStore.js'
 
-// secure:true only in production — in local dev over http the browser would
-// silently drop secure cookies (the bug I flagged in your MERN code).
+
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
@@ -29,7 +28,7 @@ async function issueTokens(user) {
   await setRefreshToken(user.id, refreshToken)
   return { accessToken, refreshToken }
 }
-
+// registerUser
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
 
@@ -45,7 +44,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   return res.status(201).json(new ApiResponse(201, user, 'User registered successfully'))
 })
-
+// loginUser
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
   if (!email || !password) throw new ApiError(400, 'email and password are required')
@@ -80,7 +79,6 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 
   const user = await findUserByIdWithToken(decoded.id)
-  // must still match the copy we stored — stops a stolen/old token being reused
   if (!user || user.refresh_token !== incoming) {
     throw new ApiError(401, 'Refresh token is invalid or has been used')
   }

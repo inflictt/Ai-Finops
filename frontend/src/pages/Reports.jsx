@@ -35,9 +35,6 @@ export default function Reports({ reports, onGenerate, generating }) {
                   <td className="mono text-muted">{r.model}</td>
                   <td><StatusChip status={r.status} /></td>
                   <td style={{ textAlign: 'right' }}>
-                    {/* {r.status === 'Ready'
-                      ? <button className="btn btn-outline"><Icon name="download" size={14} />PDF</button>
-                      : <span className="mono text-[11px] text-muted">…</span>} */}
                       {r.status === 'Ready'
                         ? <a className="btn btn-outline" href={pdfUrl(r.id)} target="_blank" rel="noreferrer"><Icon name="download" size={14} />PDF</a>
                         : <span className="mono text-[11px] text-muted">…</span>}

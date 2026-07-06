@@ -25,7 +25,7 @@ export default function CostExplorer() {
       spend: s.amount,
       pct: share,
       // priority + savings now come computed from the backend analysis layer
-      critical: s.priority ? s.priority === 'critical' : share >= 20,
+      // critical: s.priority ? s.priority === 'critical' : share >= 20,
       save: `~$${s.savings ?? Math.round(s.amount * 0.3)}`,
     }
   })
@@ -53,7 +53,7 @@ export default function CostExplorer() {
                 <span className="mono text-[13px]">${s.spend.toFixed(2)}</span>
               </div>
               <span className="bar-track"><span className="bar-fill" style={{ width: s.pct + '%' }} /></span>
-              <div className="mono text-[11px] text-muted mt-1.5">potential savings {s.save}</div>
+              {/* <div className="mono text-[11px] text-muted mt-1.5">potential savings {s.save}</div> */}
             </div>
           ))}
         </div>

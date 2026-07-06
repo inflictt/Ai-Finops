@@ -4,6 +4,7 @@ import { generateAndSaveReport } from './pipeline.js'
 // "minute hour day month weekday" — "0 8 * * 1" = 08:00 every Monday.
 // Override with CRON_SCHEDULE in .env to test (e.g. "*/1 * * * *" = every minute).
 const SCHEDULE = process.env.CRON_SCHEDULE || '0 8 * * 1'
+// const SCHEDULE = '*/1 * * * *'
 // console.log("CRON_SCHEDULE =", process.env.CRON_SCHEDULE);
 
 export function startScheduler() {

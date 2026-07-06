@@ -44,7 +44,7 @@ export default function Dashboard({ reports }) {
             <h2 className="disp text-[19px]">Spend by service</h2>
             <span className="mono text-[11px] text-muted">last 30 days</span>
           </div>
-          <p className="text-[13px] text-muted mb-5">Bar length = monthly spend · chip = estimated savings</p>
+          <p className="text-[13px] text-muted mb-5">Bar length = monthly spend </p>
           <div className="flex flex-col gap-4">
             {services.map((s) => (
               <div key={s.service} className="grid grid-cols-[120px_1fr_auto] items-center gap-3">
@@ -52,7 +52,6 @@ export default function Dashboard({ reports }) {
                 <span className="bar-track"><span className="bar-fill" style={{ width: (s.amount / maxAmount) * 100 + '%' }} /></span>
                 <span className="flex items-center gap-2 justify-end">
                   <span className="mono text-[13px] w-[58px] text-right">${s.amount.toFixed(2)}</span>
-                  <span className="chip hidden sm:inline-flex" style={{ color: '#1F8A5B', background: tint('#1F8A5B', 0.12), borderColor: tint('#1F8A5B', 0.3) }}>~${s.savings ?? Math.round(s.amount * 0.3)}</span>
                 </span>
               </div>
             ))}
@@ -84,33 +83,6 @@ export default function Dashboard({ reports }) {
           </div>
         </div>
       </div>
-
-      {/* latest analysis */}
-      {/* <div className="panel p-6 mt-4">
-        <div className="flex items-baseline justify-between mb-1">
-        </div>
-        <h2 className="disp text-[19px] mt-2 mb-4 max-w-[70ch]">
-          Two services hold almost all the saveable money — commit to reserved capacity and right-size to cut ~30%.
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {FINDINGS.map((f, i) => (
-            <div key={i} className="flex gap-3 p-3 rounded-[12px] bg-paper2">
-              <span className="feed-ic" style={{ background: tint(f.color, 0.14), color: f.color }}><Icon name={f.icon} size={15} /></span>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-[13.5px] font-semibold truncate">{f.title}</span>
-                  <span className="chip" style={{ color: f.color, background: tint(f.color, 0.13), borderColor: tint(f.color, 0.3) }}>{f.tag}</span>
-                </div>
-                <div className="text-[12.5px] text-muted">{f.note}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mono text-[11px] text-muted mt-6 flex items-center gap-2">
-        <span className="dot dot-live" style={{ background: '#1F8A5B' }} />UI preview · mock data · no API connected yet
-      </div> */}
     </div>
   )
 }

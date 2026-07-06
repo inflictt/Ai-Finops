@@ -34,6 +34,24 @@
 // export function getCostData() {
 //   return SAMPLE   // later: real Cost Explorer, falling back to SAMPLE
 // }
+
+
+// // CostApiData/costData.js
+// import aws from '../providers/aws.sample.js'
+// import azure from '../providers/azure.sample.js'
+// import gcp from '../providers/gcp.sample.js'
+
+// const SAMPLES = { aws, azure, gcp }
+
+// export function getCostData(provider = 'azure') {
+//   return SAMPLES[provider] || SAMPLES.aws
+// }
+
+
+
+
+
+// --------
 const SAMPLE = {
   provider: "AWS",
 
@@ -63,14 +81,3 @@ const SAMPLE = {
 export function getCostData() {
   return SAMPLE   // later: real Cost Explorer, falling back to SAMPLE
 }
-
-// CostApiData/costData.js
-// import aws from '../providers/aws.sample.js'
-// import azure from '../providers/azure.sample.js'
-// import gcp from '../providers/gcp.sample.js'
-
-// const SAMPLES = { aws, azure, gcp }
-
-// export function getCostData(provider = 'gcp') {
-//   return SAMPLES[provider] || SAMPLES.aws
-// }

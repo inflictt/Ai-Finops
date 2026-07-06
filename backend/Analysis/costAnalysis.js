@@ -1,5 +1,4 @@
 // The analysis layer — replaces the flat "× 0.3" guess and the hardcoded "~30%".
-// It's rule-based (not ML, and honest to call it that): different service types
 // have different amounts of recoverable spend, which is exactly how a real
 // FinOps tool reasons. Savings and the reduction % are now COMPUTED from the
 // actual service mix, so they change with the data instead of being constants.

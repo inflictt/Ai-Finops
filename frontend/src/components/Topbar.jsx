@@ -26,7 +26,7 @@ export default function Topbar({ page, dark, setDark, onGenerate, generating }) 
         {user && (
           <div className="flex items-center gap-2 pl-1">
             <span className="mono text-[12px] text-muted hidden md:inline">{user.email}</span>
-            <button className="btn-outline" onClick={logout}>Log out</button>
+            <button className="btn btn-outline" onClick={logout}>Log out</button>
           </div>
         )}
       </div>

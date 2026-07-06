@@ -65,14 +65,14 @@ app.get('/api/reports/:id/pdf', verifyJWT, async (req, res) => {
   res.send(report.pdf)
 })
 
-// ---- dev/test routes (sample data, no user) ----
+// server.js — /api/analyze and /api/report/pdf now destructure { markdown }
 app.post('/api/analyze', async (req, res) => {
-  const analysis = await analyzeWithGemini(getCostData())
-  res.json({ analysis })
+  const { markdown } = await analyzeWithGemini(getCostData())
+  res.json({ analysis: markdown })
 })
-
 app.get('/api/report/pdf', async (req, res) => {
-  const pdf = await makePdf(await analyzeWithGemini(getCostData()))
+  const { markdown } = await analyzeWithGemini(getCostData())
+  const pdf = await makePdf(markdown)
   res.setHeader('Content-Type', 'application/pdf')
   res.setHeader('Content-Disposition', 'attachment; filename="finops-report.pdf"')
   res.send(pdf)

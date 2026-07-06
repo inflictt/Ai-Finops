@@ -1,4 +1,3 @@
-// The ONE place that turns thrown errors into JSON responses.
 // Mounted LAST in server.js (after all routes). Because asyncHandler forwards
 // errors here, controllers can just `throw new ApiError(...)` and stop.
 import ApiError from '../utils/ApiError.js'

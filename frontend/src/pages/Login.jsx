@@ -19,8 +19,7 @@ export default function Login() {
     setBusy(true)
     try {
       if (isSignup) await register(name, email, password)
-      else await login(email, password)
-      // success → AuthProvider sets the user → App renders the dashboard
+      else await login(email, password) // success → AuthProvider sets the user → App renders the dashboard
     } catch (err) {
       setError(err.message || 'Something went wrong')
     } finally {

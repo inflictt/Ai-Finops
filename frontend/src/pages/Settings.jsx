@@ -22,15 +22,7 @@ export default function Settings({ dark, setDark }) {
               <option>gemini-2.5-flash</option>
             </select>
           </div>
-        </div>
-
-        <div className="panel p-6">
-          <h2 className="disp text-[18px] mb-4">Storage &amp; theme</h2>
-          <div className="flex flex-col gap-2 mb-4">
-            <label className="field-label">S3 bucket (optional)</label>
-            <input className="input" placeholder="finops-reports-yourname" disabled />
-          </div>
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center justify-between pt-4">
             <div>
               <div className="field-label">Appearance</div>
               <div className="text-[12.5px] text-muted">Light / dark theme</div>
@@ -40,6 +32,8 @@ export default function Settings({ dark, setDark }) {
             </button>
           </div>
         </div>
+
+        
       </div>
     </div>
   )
