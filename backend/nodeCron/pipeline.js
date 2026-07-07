@@ -1,4 +1,4 @@
-// Phase 3/4/5 — the shared pipeline, now aware of who owns the report AND
+//  the shared pipeline, now aware of who owns the report AND
 // carrying the AI's validated savings numbers through to storage.
 import { getCostData } from '../CostApiData/costData.js'
 import { analyzeWithGemini } from '../Ai/aiAnalysis.js'
@@ -9,7 +9,6 @@ import { sendReportEmail } from '../Mail/mailer.js'
 export async function generateAndSaveReport(userId = null) {
   const costData = getCostData()
 
-  // Gemini now returns BOTH the report text and the validated savings numbers.
   const { markdown, savings } = await analyzeWithGemini(costData)
 
   const pdf = await makePdf(markdown)

@@ -51,7 +51,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const user = await findUserByEmail(email)
   // Same generic message whether the email or the password is wrong — so we
-  // don't reveal which emails have accounts (an improvement over "user doesn't exist").
+  // don't reveal which emails have accounts 
   if (!user) throw new ApiError(401, 'Invalid email or password')
 
   const ok = await bcrypt.compare(password, user.password)

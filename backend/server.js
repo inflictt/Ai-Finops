@@ -32,7 +32,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'finops-backend', time: new Date().toISOString() })
 })
 
-// ---- protected: must be logged in (verifyJWT sets req.user) ----
 
 // Cost data for the dashboard charts
 app.get('/api/costs', verifyJWT, (req, res) => { res.json(analyzeCosts(getCostData())) })
@@ -55,7 +54,7 @@ app.get('/api/reports', verifyJWT, async (req, res) => {
   res.json(await listReports(req.user.id))
 })
 
-// Download one of THIS user's reports (404 if it isn't theirs)
+
 app.get('/api/reports/:id/pdf', verifyJWT, async (req, res) => {
   const report = await getReport(req.params.id, req.user.id)
   if (!report) return res.status(404).json({ error: 'report not found' })
@@ -70,6 +69,7 @@ app.post('/api/analyze', async (req, res) => {
   const { markdown } = await analyzeWithGemini(getCostData())
   res.json({ analysis: markdown })
 })
+
 app.get('/api/report/pdf', async (req, res) => {
   const { markdown } = await analyzeWithGemini(getCostData())
   const pdf = await makePdf(markdown)

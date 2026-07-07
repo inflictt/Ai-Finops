@@ -19,7 +19,7 @@ export default function Sidebar({ page, setPage }) {
         <div className="nav-section">Operations</div>
         {NAV.map((n) => (
           <button key={n.id} className={'nav-item' + (page === n.id ? ' active' : '')} onClick={() => setPage(n.id)}>
-            <Icon name={n.icon} size={18} />
+            <Icon name={n.icon} size={36} />
             {n.label}
             {n.badge ? <span className="nav-badge">{n.badge}</span> : null}
           </button>

@@ -17,9 +17,8 @@ export default function Settings({ dark, setDark }) {
           </div>
           <div className="flex flex-col gap-2">
             <label className="field-label">Model</label>
-            <select className="input" defaultValue="gemini-2.0-flash">
+            <select className="input" defaultValue="gemini-2.0-flash" disabled>
               <option>gemini-2.0-flash</option>
-              <option>gemini-2.5-flash</option>
             </select>
           </div>
           <div className="flex items-center justify-between pt-4">
@@ -27,7 +26,7 @@ export default function Settings({ dark, setDark }) {
               <div className="field-label">Appearance</div>
               <div className="text-[12.5px] text-muted">Light / dark theme</div>
             </div>
-            <button className="btn btn-outline" onClick={() => setDark((d) => !d)}>
+            <button className="btn btn-outline" onClick={() => setDark((d) => !d)} disabled>
               <Icon name={dark ? 'sun' : 'moon'} size={14} />{dark ? 'Light' : 'Dark'} mode
             </button>
           </div>

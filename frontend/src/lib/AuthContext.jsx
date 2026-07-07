@@ -32,7 +32,7 @@ export function AuthProvider({ children }) {
   }
 
   const logout = async () => {
-    try { await logoutUser() } catch (e) { /* ignore */ }
+    try { await logoutUser() } catch (e) {}
     setUser(null)
   }
 

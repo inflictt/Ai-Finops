@@ -14,7 +14,7 @@ export default function Topbar({ page, dark, setDark, onGenerate, generating }) 
     >
       <div className="flex items-center gap-2.5 min-w-0">
         <span className="mono text-[12px] text-muted hidden sm:inline">FinOps /</span>
-        <span className="disp text-[18px] truncate">{TITLES[page]}</span>
+        <span className="disp text-[28px] truncate">{TITLES[page]}</span>
       </div>
       <div className="flex items-center gap-2.5">
         <button className="btn-icon" aria-label="Toggle theme" onClick={() => setDark((d) => !d)}>

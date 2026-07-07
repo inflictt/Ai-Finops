@@ -32,7 +32,7 @@ export default function CostExplorer() {
 
   return (
     <div>
-      <div className="eyebrow mb-3"><span className="ebdot" />Spend breakdown · last 30 days</div>
+      {/* <div className="eyebrow mb-3"><span className="ebdot" />Spend breakdown · last 30 days</div> */}
       <h1 className="disp text-[clamp(1.8rem,3.5vw,2.5rem)]">Cost Explorer</h1>
       <p className="text-[15px] text-ink2 mt-3 max-w-[54ch]">Where every dollar goes, by service — and how much of it is saveable.</p>
 

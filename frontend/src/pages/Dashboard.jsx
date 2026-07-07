@@ -3,7 +3,6 @@ import MetricCard from '../components/MetricCard.jsx'
 import StatusChip from '../components/StatusChip.jsx'
 import { Icon } from '../lib/icons.jsx'
 import { tint } from '../lib/util.js'
-import { FINDINGS } from '../lib/data.js'
 import { getCosts } from '../lib/api.js'
 
 export default function Dashboard({ reports }) {
@@ -21,9 +20,9 @@ export default function Dashboard({ reports }) {
 
   return (
     <div>
-      <div className="eyebrow mb-3"><span className="ebdot" />Weekly cost intelligence · ap-south-1</div>
+      {/* <div className="eyebrow mb-3"><span className="ebdot" />Weekly cost intelligence · ap-south-1</div> */}
       <h1 className="disp text-[clamp(2rem,4vw,3rem)] max-w-[18ch]" style={{ letterSpacing: '-.035em' }}>
-        Your AWS bill, <span className="accent-text">read by AI.</span>
+        Your AWS bill report , <span className="accent-text">read by AI.</span>
       </h1>
       <p className="text-[15.5px] text-ink2 mt-3.5 max-w-[58ch]">
         An automated weekly report finds where the money goes and where you're wasting it , no spreadsheets, no manual analysis.
@@ -31,8 +30,8 @@ export default function Dashboard({ reports }) {
 
       {/* metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-7">
-        <MetricCard icon="chart" color="#3A30E0" value={latest.total} label="Monthly spend"  />
-        <MetricCard icon="piggy" color="#1F8A5B" value={latest.saveRange} label="Savings identified"   />
+        <MetricCard icon="chart" color="#3A30E0" value={latest.total} label="Monthly spend overall"  />
+        <MetricCard icon="piggy" color="#1F8A5B" value={latest.saveRange} label="Total Savings identified"   />
         <MetricCard icon="trendDown" color="#0E8C9B" value={ latest.reduction} label="Cost reduction"   />
         <MetricCard icon="file" color="#5B4BFF" value={String(readyCount)} label="Reports generated" />
       </div>

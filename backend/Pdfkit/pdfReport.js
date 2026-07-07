@@ -113,7 +113,7 @@ export function makePdf(markdown) {
     doc.on("error", reject);
     doc.on("end", () => resolve(Buffer.concat(chunks)));
 
-    // branded eyebrow at the top
+
     doc.font("Helvetica-Bold").fontSize(9).fillColor(MUTE)
       .text("AI FINOPS · COST INTELLIGENCE", { characterSpacing: 1.5 });
     doc.moveDown(0.5);
