@@ -8,8 +8,7 @@ import { startScheduler } from './nodeCron/scheduler.js'
 import authRoutes from './Auth/authRoutes.js'
 import { verifyJWT } from './middlewares/verifyJWT.js'
 import { errorHandler } from './middlewares/errorHandler.js'
-import { analyzeCosts } from './Analysis/costAnalysis.js' 
-
+import { analyzeCosts } from './Analysis/costAnalysis.js'
 import { getCostData } from './CostApiData/costData.js'
 import { analyzeWithGemini } from './Ai/aiAnalysis.js'
 import { makePdf } from './Pdfkit/pdfReport.js'
@@ -21,7 +20,19 @@ const PORT = process.env.PORT || 4000
 initDb().catch((e) => console.error('DB init failed:', e))
 startScheduler()
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+// app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+// app.use(cors({ origin: 'http://localhost:5174', credentials: true }))
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://ai-finops-frontend.onrender.com'
+]
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}))
 app.use(express.json())
 app.use(cookieParser())
 
